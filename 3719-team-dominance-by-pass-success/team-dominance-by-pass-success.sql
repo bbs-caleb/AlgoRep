@@ -7,11 +7,9 @@ select
     p.pass_to, 
     t2.team_name as team_name_to,
     CASE
-        WHEN (split_part(p.time_stamp, ':', 1)::int * 60
-            + split_part(p.time_stamp, ':', 2)::int) <= 45*60
-        THEN 1
-        ELSE 2
-      END AS half_number
+      WHEN p.time_stamp <= '45:00' THEN 1
+      ELSE 2
+    END AS half_number
 from Passes p
 join Teams t1 on p.pass_from = t1.player_id 
 join Teams t2 on p.pass_to = t2.player_id ) 
