@@ -7,16 +7,20 @@
 class Solution:
     def increasingBST(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
         dummy = TreeNode()
-        self.tail = dummy
+        tail = dummy
 
-        def inorder(node):
-            if node is None:
-                return
-            inorder(node.left)
-            node.left = None
-            self.tail.right = node
-            self.tail = node 
-            inorder(node.right)
+        stack = []
+        curr = root
 
-        inorder(root)
+
+        while curr or stack:
+            while curr:
+                stack.append(curr)
+                curr = curr.left
+            
+            curr = stack.pop()
+            curr.left = None 
+            tail.right = curr 
+            tail = curr 
+            curr = curr.right
         return dummy.right
