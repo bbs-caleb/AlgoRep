@@ -6,20 +6,17 @@
 #         self.right = right
 class Solution:
     def getLonelyNodes(self, root: Optional[TreeNode]) -> List[int]:
-        stack = [root]
-        result = []
+        res = []
+        def dfs(node):
+            if not node:
+                return
+            if (node.left is None) ^ (node.right is None):
+                if (node.left and node.right is None):
+                    res.append(node.left.val)
+                if (node.left is None and node.right):
+                    res.append(node.right.val)
 
-        while stack:
-            node = stack.pop()
-
-            if (node.left and node.right is None) or (node.left is None and node.right):
-                if node.left:
-                    result.append(node.left.val)
-                if node.right:
-                    result.append(node.right.val)
-
-            if node.left:
-                stack.append(node.left)
-            if node.right:
-                stack.append(node.right)
-        return result 
+            dfs(node.left)
+            dfs(node.right)
+        dfs(root)
+        return res 
