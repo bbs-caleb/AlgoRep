@@ -9,14 +9,13 @@ class Solution:
         if not root:
             return []
 
-        res = []
-        
-        def dfs(node):
-            if not node:
-                return 
-            dfs(node.left)
-            dfs(node.right)
-            res.append(node.val)
-        dfs(root)
-        return res 
+        stack, res = [root], []
 
+        while stack:
+            node = stack.pop()
+            res.append(node.val)
+            if node.left:
+                stack.append(node.left)
+            if node.right:
+                stack.append(node.right)
+        return res[::-1]
