@@ -8,14 +8,14 @@ class Node:
 
 class Solution:
     def postorder(self, root: 'Node') -> List[int]:
+        if not root:
+            return []
+        
+        stack = [root]
         ans = []
 
-        def dfs(node):
-            if node is None:
-                return
-            for child in node.children:
-                dfs(child)
+        while stack:
+            node = stack.pop()
             ans.append(node.val)
-        
-        dfs(root)
-        return ans
+            stack.extend(node.children)
+        return ans[::-1]
