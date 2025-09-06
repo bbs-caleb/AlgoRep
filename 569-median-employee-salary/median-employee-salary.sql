@@ -5,10 +5,7 @@ FROM (
     id,
     company,
     salary,
-    ROW_NUMBER() OVER (
-      PARTITION BY company
-      ORDER BY salary, id
-    ) AS rn,
+    ROW_NUMBER() OVER (PARTITION BY company ORDER BY salary, id) AS rn,
     COUNT(*) OVER (PARTITION BY company) AS n
   FROM Employee
 ) t
