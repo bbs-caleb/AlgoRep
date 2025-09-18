@@ -6,3 +6,6 @@ def find_students(departments: pd.DataFrame, students: pd.DataFrame) -> pd.DataF
             .query('_merge == "left_only"')[['id_x', 'name_x']]
             .rename(columns={'id_x': 'id', 'name_x': 'name'}))
     return invalid
+
+
+    
