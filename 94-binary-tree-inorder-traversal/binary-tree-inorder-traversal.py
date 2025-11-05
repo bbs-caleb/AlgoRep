@@ -8,7 +8,7 @@ class Solution:
     def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
         res = []
         stack = []
-        curr = root 
+        curr = root
 
         while curr or stack:
             while curr:
