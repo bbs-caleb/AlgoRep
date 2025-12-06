@@ -7,16 +7,26 @@
 7class Solution:
 8    def rangeSumBST(self, root: Optional[TreeNode], low: int, high: int) -> int:
 9        if root is None:
-10            return 0
-11        total = 0
-12        
-13        if low <= root.val <= high:
-14            total += root.val
-15        
-16        if root.val > low:
-17            total += self.rangeSumBST(root.left, low, high)
-18        if root.val < high:
-19            total += self.rangeSumBST(root.right, low, high)
-20        return total 
-21
-22
+10            return 0 
+11
+12        total = 0
+13        stack = [root]
+14
+15        while stack:
+16            node = stack.pop()
+17
+18            if node is None:
+19                continue 
+20
+21            if low <= node.val <= high:
+22                total += node.val 
+23            
+24            if node.val > low:
+25                stack.append(node.left)
+26            
+27            if node.val < high:
+28                stack.append(node.right)
+29        return total 
+30
+31            
+32
