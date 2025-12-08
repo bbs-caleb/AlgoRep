@@ -6,9 +6,6 @@
 #         self.right = right
 class Solution:
     def deepestLeavesSum(self, root: Optional[TreeNode]) -> int:
-        if not root:
-            return 0 
-        
         queue = deque([root])
         deepest_sum = 0
 
@@ -18,11 +15,13 @@ class Solution:
 
             for _ in range(level_size):
                 node = queue.popleft()
-                level_sum += node.val 
+                level_sum += node.val
 
-                if node.left is not None:
+                if node.left:
                     queue.append(node.left)
-                if node.right is not None:
+                if node.right:
                     queue.append(node.right)
             deepest_sum = level_sum
-        return deepest_sum 
+        return deepest_sum
+
+        
