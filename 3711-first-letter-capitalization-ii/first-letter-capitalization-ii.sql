@@ -1,39 +1,30 @@
-with counters as (
-    select  
-            content_id,
-            content_text,
-            gs.i as ind,
-            substring(u.content_text from gs.i for 1) as char_
-    from user_content u 
-    cross join generate_series(1, length(u.content_text)) as gs(i))
+WITH RECURSIVE r AS (
+  SELECT
+    content_id,
+    content_text,
+    lower(content_text) AS s,
+    97 AS code  -- 'a'
+  FROM user_content
 
-    , cte as (
-        select 
-                content_id, 
-                content_text, 
-                ind,
-                char_,
-                lag(char_) over (partition by content_id
-                            order by ind) as prev_char
-        from counters
-    )
-    , cte2 as (
-        select 
-                content_id,
-                content_text,
-                case
-                    when prev_char is null or prev_char = ' ' 
-                        then upper(char_) 
-                    when prev_char = '-'
-                        then upper(char_)
-                    else lower(char_)
-                end as char
-        from cte
-    )
+  UNION ALL
 
-    select  
-            content_id,
-            content_text as original_text,
-            string_agg(char, '') as converted_text
-    from cte2
-    group by 1, 2
+  SELECT
+    content_id,
+    content_text,
+    regexp_replace(
+      s,
+      '(^|[ -])' || chr(code),
+      E'\\1' || chr(code - 32),  
+      'g'
+    ) AS s,
+    code + 1
+  FROM r
+  WHERE code <= 122 
+)
+SELECT
+  content_id,
+  content_text AS original_text,
+  s AS converted_text
+FROM r
+WHERE code = 123    
+ORDER BY content_id;
