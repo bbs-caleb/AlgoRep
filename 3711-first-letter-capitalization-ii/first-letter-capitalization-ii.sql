@@ -2,8 +2,6 @@ with counters as (
     select  
             content_id,
             content_text,
-            length(content_text) - length(replace(content_text,' ', '')) as count_spaces,
-            length(content_text) - length(replace(content_text,'-', '')) as count_hyphen,
             gs.i as ind,
             substring(u.content_text from gs.i for 1) as char_
     from user_content u 
@@ -13,8 +11,6 @@ with counters as (
         select 
                 content_id, 
                 content_text, 
-                count_spaces,
-                count_hyphen,
                 ind,
                 char_,
                 lag(char_) over (partition by content_id
