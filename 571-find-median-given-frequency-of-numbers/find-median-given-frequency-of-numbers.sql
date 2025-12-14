@@ -1,21 +1,29 @@
-with cte as (
-    select  
-            num, 
-            row_number() over (order by num) as rnk,
-            count(*) over () as total
-    from numbers n
-    cross join lateral generate_series(1, n.frequency) as gs(i)
+WITH ordered AS (
+  SELECT
+    num,
+    frequency,
+    SUM(frequency) OVER (ORDER BY num) AS cum,
+    SUM(frequency) OVER ()             AS total
+  FROM Numbers
+),
+pos AS (
+  SELECT DISTINCT
+    (total + 1) / 2 AS p1,
+    (total + 2) / 2 AS p2
+  FROM ordered
+),
+hits AS (
+  SELECT
+    o.num,
+    (o.cum - o.frequency + 1) AS lo,
+    o.cum                      AS hi,
+    p.p1, p.p2
+  FROM ordered o
+  CROSS JOIN pos p
 )
-
-select
-        round(avg(num), 1) as median
-from cte 
-where 
-    case 
-        when total % 2 = 1 and total / 2 + 1 = rnk 
-            then true
-        when total % 2 = 0 and (rnk = total / 2 or rnk = total / 2 + 1)
-            then true
-        else false
-    end
-    
+SELECT ROUND(AVG(num)::numeric, 1) AS median
+FROM (
+  SELECT num FROM hits WHERE p1 BETWEEN lo AND hi
+  UNION ALL
+  SELECT num FROM hits WHERE p2 BETWEEN lo AND hi
+) x;
