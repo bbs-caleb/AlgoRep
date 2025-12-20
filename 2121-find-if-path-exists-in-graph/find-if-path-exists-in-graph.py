@@ -4,21 +4,21 @@ class Solution:
             return True
         
         graph = [[] for _ in range(n)]
-
         for u, v in edges:
             graph[u].append(v)
             graph[v].append(u)
         
-        visited = [False] * n 
+        visited = [False] * n
         stack = [source]
         visited[source] = True
 
         while stack:
             node = stack.pop()
             if node == destination:
-                return True
-            for neigh in graph[node]:
-                if not visited[neigh]:
-                    visited[neigh] = True
-                    stack.append(neigh)
+                return True 
+            for neighbour in graph[node]:
+                if not visited[neighbour]:
+                    visited[neighbour] = True
+                    stack.append(neighbour)
         return False
+
