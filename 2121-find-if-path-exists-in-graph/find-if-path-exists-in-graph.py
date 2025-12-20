@@ -5,20 +5,19 @@ class Solution:
         
         graph = [[] for _ in range(n)]
         for u, v in edges:
-            graph[u].append(v)
             graph[v].append(u)
+            graph[u].append(v)
         
-        visited = [False] * n
-        stack = [source]
+        visited = [False] * n 
+        q = deque([source])
         visited[source] = True
 
-        while stack:
-            node = stack.pop()
+        while q:
+            node = q.popleft()
             if node == destination:
-                return True 
-            for neighbour in graph[node]:
-                if not visited[neighbour]:
-                    visited[neighbour] = True
-                    stack.append(neighbour)
+                return True
+            for neighbor in graph[node]:
+                if not visited[neighbor]:
+                    visited[neighbor] = True
+                    q.append(neighbor)
         return False
-
