@@ -3,22 +3,22 @@ class Solution:
         if source == destination:
             return True
         
-        g = [[] for _ in range(n)]
+        graph = [[] for _ in range(n)]
+
         for u, v in edges:
-            g[u].append(v)
-            g[v].append(u)
+            graph[u].append(v)
+            graph[v].append(u)
         
-        seen = [False] * n
-        seen[source] = True 
+        visited = [False] * n 
+        stack = [source]
+        visited[source] = True
 
-        q = deque([source])
-
-        while q:
-            u = q.popleft()
-            if u == destination:
+        while stack:
+            node = stack.pop()
+            if node == destination:
                 return True
-            for v in g[u]:
-                if not seen[v]:
-                    seen[v] = True
-                    q.append(v)
-        return False 
+            for neigh in graph[node]:
+                if not visited[neigh]:
+                    visited[neigh] = True
+                    stack.append(neigh)
+        return False
