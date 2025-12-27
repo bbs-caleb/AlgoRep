@@ -1,4 +1,6 @@
-select distinct session_id
+select distinct p.session_id 
 from Playback p 
-where not exists (select 1 from Ads a where a.customer_id = p.customer_id and a.timestamp between p.start_time and p.end_time)
-order by session_id
+left join Ads a 
+    on p.customer_id = a.customer_id and a.timestamp between p.start_time and p.end_time
+where a.ad_id is null
+order by p.session_id
